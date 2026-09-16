@@ -3,7 +3,8 @@ const preference=matchMedia('(prefers-reduced-motion: reduce)');
 let paused=preference.matches;
 const toggle=document.querySelector('#motion-toggle');
 const scene=mountEnergyScene(document.querySelector('#energy-scene'),()=>paused);
-function syncMotion(){document.body.classList.toggle('motion-paused',paused);toggle.textContent=paused?'Resume motion ▷':'Pause motion Ⅱ';toggle.setAttribute('aria-pressed',String(paused));toggle.setAttribute('aria-label',paused?'Resume animations':'Pause animations');scene.update();}
+function syncMotion(){document.body.classList.toggle('motion-paused',paused);toggle.textContent=paused?'Resume motion ▷':'Pause motion Ⅱ';toggle.setAttribute('aria-pressed',String(paused));toggle.setAttribute('aria-label',paused?'Resume animations':'Pause animations');scene.update();document.dispatchEvent(new CustomEvent('portfolio-motion-change',{detail:{paused}}));}
+document.addEventListener('portfolio-toggle-motion',()=>{paused=!paused;syncMotion()});
 toggle.addEventListener('click',()=>{paused=!paused;syncMotion()});
 preference.addEventListener('change',event=>{paused=event.matches;syncMotion()});syncMotion();
 const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}})},{threshold:.06});
