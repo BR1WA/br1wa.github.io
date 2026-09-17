@@ -4,6 +4,8 @@ Professional portfolio with project-specific 3D models, scroll-driven case-study
 
 The visual palette pairs graphite and cool white with electric blue. Project models share blue highlights and neutral materials, with their geometry and workflows providing the distinction. The résumé and favicon use the same palette.
 
+Dark mode is the default. The header appearance toggle saves an explicit light/dark preference locally and synchronizes it across portfolio and résumé tabs. Both themes keep the 3D scenes intact. The résumé always prints on white paper with dark text.
+
 Run `node serve.mjs` for http://localhost:4173. The published directory is `dist/`.
 
 Content is grounded in the supplied August 2026 CV sources and project READMEs, with graduation updated from the user's September 2026 confirmation. Project images are from the user's ASL and HR repositories. The portrait is from the supplied CV archive. No employee records or operational documents are bundled.
