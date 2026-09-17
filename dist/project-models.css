@@ -5,3 +5,40 @@
 @media(max-width:360px){.small-projects .project-visual.model-host{height:345px}.model-step-buttons button{font-size:10px}.model-head b{display:none}}
 
 .model-step-buttons button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:white}.model-step-buttons button:hover{border-color:#8292b0}.model-host .model-head,.model-host[data-model] .model-head{color:#c1cad9}.model-head b,.model-caption{color:#a0aaba}.model-controls{background:#f7f8fa;border-color:var(--line)}
+
+/* The ASL scene is a spatial study: anatomical volume, measured geometry, and data flow. */
+.small-projects .project-visual.model-host[data-model=asl]{height:550px;container:hand-scene / inline-size;background:radial-gradient(ellipse at 42% 42%,#243449 0%,#151b24 43%,#15181e 76%)!important}
+.model-host[data-model=asl] .model-head{padding-bottom:16px;border-bottom:1px solid #a3bded19}
+.hand-readout{position:absolute;top:88px;right:22px;width:130px;pointer-events:none;color:#c0cde1}
+.hand-readout-label{display:block;font:10px/1.5 var(--body);letter-spacing:1.2px;color:#9aaecb}
+.hand-readout>strong{display:block;font:500 48px/1.1 var(--display);letter-spacing:-2px;color:#deebff;margin:12px 0 16px}
+.hand-readout>strong>span{display:block;font:12px/1.5 var(--body);letter-spacing:.3px;color:#9baec9;margin-top:6px}
+.hand-readout-detail{font:12px/1.8 var(--body);color:#afbdd2}
+.hand-mini-axes{display:flex;align-items:center;gap:8px;font:10px/1 monospace;color:#a4bfe9;margin-top:19px}
+.hand-mini-axes i{width:15px;height:1px;background:#667e9e}
+.hand-stage-note{position:absolute;left:22px;right:22px;top:61px;display:flex;align-items:center;justify-content:space-between;gap:12px;font:9px/1.5 var(--body);letter-spacing:1px;color:#839cbe;pointer-events:none}
+.hand-stage-note b{font-weight:400;color:#b5c7e2}
+.hand-branches{position:absolute;right:22px;bottom:102px;width:135px;opacity:0;transform:translateY(6px);transition:opacity .45s,transform .45s;pointer-events:none;color:#9bacc6;font:10px/1.7 var(--body)}
+.hand-branches.is-visible{opacity:1;transform:none}
+.hand-branches>span{display:block;border-left:1px solid #7699d5;padding:0 0 0 10px;margin-top:14px}
+.hand-branches b{display:block;color:#d7e5fc;font-size:12px;font-weight:500}
+.hand-branches>strong{display:block;border-top:1px solid #7898cc44;margin-top:14px;padding-top:10px;font-size:11px;font-weight:400;color:#8db2ff}
+.model-host[data-model=asl]:not(.model-ready) :is(.hand-readout,.hand-stage-note,.hand-branches){display:none}
+@container hand-scene (max-width:520px){
+ .hand-stage-note{left:16px;right:16px;font-size:8px}
+ .hand-stage-note b{display:none}
+ .model-head b{font-size:8px}
+ .hand-readout{top:auto;bottom:55px;left:20px;right:20px;width:auto;display:grid;grid-template-columns:110px 1fr;align-items:center;border-top:1px solid #93b3e626;padding-top:13px}
+ .hand-readout-label{grid-column:1/-1;font-size:9px}
+ .hand-readout>strong{font-size:32px;letter-spacing:-1px;margin:5px 0 0}
+ .hand-readout>strong>span{display:inline;font-size:10px;margin-left:8px;letter-spacing:0}
+ .hand-readout-detail{font-size:11px;line-height:1.65}
+ .hand-mini-axes{display:none}
+ .hand-branches{bottom:60px;right:20px;width:calc(100% - 150px);display:flex;flex-wrap:wrap;gap:8px;font-size:8px}
+ .hand-branches>span{margin:0;padding-left:7px;flex:1;white-space:nowrap}
+ .hand-branches b{font-size:10px}
+ .hand-branches>strong{margin:0;padding:0;border:0;font-size:9px;width:100%}
+ .model-host[data-step="2"] .hand-readout-detail{visibility:hidden}
+}
+@container hand-scene (max-width:320px){.hand-readout{grid-template-columns:91px 1fr}.hand-readout>strong{white-space:nowrap}.hand-readout>strong>span{display:block;margin:2px 0 0}.hand-branches{width:calc(100% - 128px);gap:5px}.hand-branches>span{padding-left:4px}.hand-branches b{font-size:9px}.hand-readout-detail{font-size:10px}.model-head b{display:none}}
+@media(prefers-reduced-motion:reduce){.hand-branches{transition:none}}
