@@ -42,3 +42,19 @@
 }
 @container hand-scene (max-width:320px){.hand-readout{grid-template-columns:91px 1fr}.hand-readout>strong{white-space:nowrap}.hand-readout>strong>span{display:block;margin:2px 0 0}.hand-branches{width:calc(100% - 128px);gap:5px}.hand-branches>span{padding-left:4px}.hand-branches b{font-size:9px}.hand-readout-detail{font-size:10px}.model-head b{display:none}}
 @media(prefers-reduced-motion:reduce){.hand-branches{transition:none}}
+
+/* HR-System: a connected administrative workspace with three physical stations. */
+.small-projects .project-visual.model-host[data-model=hr]{height:550px;container:hr-scene / inline-size;background:radial-gradient(ellipse at 50% 45%,#243247 0%,#19212d 44%,#15181e 78%)!important}
+.model-host[data-model=hr] .model-head{padding-bottom:16px;border-bottom:1px solid #a3bded19}
+.hr-scene-heading{position:absolute;top:65px;left:22px;right:22px;pointer-events:none}
+.hr-scene-heading>span{display:block;font:9px/1.5 var(--body);letter-spacing:1.1px;color:#8da6c9}
+.hr-scene-heading>strong{display:block;font:400 17px/1.5 var(--display);letter-spacing:-.3px;color:#d7e5f9;margin-top:10px}
+.hr-workflow-strip{position:absolute;bottom:60px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #8cace02b;padding-top:18px;font:11px/1.5 var(--body);color:#8294ad;pointer-events:none}
+.hr-workflow-strip>span{display:flex;align-items:center;gap:9px}
+.hr-workflow-strip i{font:10px/1 monospace;font-style:normal;border:1px solid #7c96bd40;border-radius:50%;padding:6px;color:#91a6c4}
+.hr-workflow-strip .is-active{color:#e1ecfc}
+.hr-workflow-strip .is-active i{color:#dce9ff;background:#285bb4;border-color:#638cdf}
+.hr-workflow-strip>b{font-size:14px;font-weight:400;color:#5c7291}
+.model-host[data-model=hr]:not(.model-ready) :is(.hr-scene-heading,.hr-workflow-strip){display:none}
+@container hr-scene (max-width:450px){.hr-scene-heading{left:16px;right:16px}.hr-scene-heading>strong{max-width:270px;font-size:15px}.hr-workflow-strip{left:16px;right:16px;font-size:10px;gap:5px}.hr-workflow-strip>span{gap:5px}.hr-workflow-strip i{padding:4px;font-size:9px}.hr-workflow-strip>b{font-size:11px}.model-head b{font-size:8px}}
+@container hr-scene (max-width:320px){.hr-workflow-strip i{display:none}.hr-scene-heading>strong{font-size:14px}.model-head b{display:none}}
