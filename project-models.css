@@ -6,6 +6,9 @@
 
 .model-step-buttons button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:white}.model-step-buttons button:hover{border-color:#8292b0}.model-host .model-head,.model-host[data-model] .model-head{color:#c1cad9}.model-head b,.model-caption{color:#a0aaba}.model-controls{background:#f7f8fa;border-color:var(--line)}
 
+/* Hide interaction prompts when the static project fallback is shown. */
+.model-host:not(.model-ready) :is(.model-head,.model-caption){display:none}
+
 /* The ASL scene is a spatial study: anatomical volume, measured geometry, and data flow. */
 .small-projects .project-visual.model-host[data-model=asl]{height:550px;container:hand-scene / inline-size;background:radial-gradient(ellipse at 42% 42%,#243449 0%,#151b24 43%,#15181e 76%)!important}
 .model-host[data-model=asl] .model-head{padding-bottom:16px;border-bottom:1px solid #a3bded19}
