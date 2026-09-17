@@ -16,4 +16,6 @@ HR-System's detailed scene uses a layered personnel register, an administrative 
 
 Employee Manager uses a detailed open archive with indexed folders, sliding drawers, exposed rails, and a translucent side panel. Search extracts a schematic profile from the archive; the export stage presents a structured report. The scene is a conceptual illustration of the existing record-management workflows, not an interface to personnel data.
 
+InfinityScript.CV uses a layered document studio with editable sections, paper edges, alignment guides, and a completed PDF preview. English/Arabic controls change the actual document texture and reading direction, including while motion is paused. The model illustrates document construction and export; it does not generate a downloadable résumé itself.
+
 Public hosting: https://br1wa.github.io/ . Deploy the contents of `dist/` to the root of `BR1WA/br1wa.github.io`, including `.nojekyll`. The previous Sites publication remains available, but GitHub Pages is the current publishing destination.

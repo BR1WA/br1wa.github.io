@@ -2,46 +2,17 @@ import * as THREE from './vendor/three.module.js';
 import {createHandModel} from './hand-landmarks.js';
 import {createHRModel} from './hr-workflow.js';
 import {createEmployeeModel} from './employee-archive.js';
+import {createResumeModel} from './resume-studio.js';
 
 const definitions={
  asl:{title:'THE HAND-LANDMARK PIPELINE',figure:'FIG. 02',color:0x8db2ff,steps:['Landmarks','Features','Classification'],descriptions:['A sculpted hand reveals the 21 spatial landmarks used by the recognition pipeline, from wrist to fingertips.','Selected measurement lines illustrate the 75-feature representation used by Random Forest: coordinates and geometric relationships.','Skeleton images feed MobileNet; engineered features feed Random Forest. Both approaches target 26 alphabet classes. This scene illustrates the pipeline; it does not run inference.']},
  hr:{title:'THE HR DOCUMENT WORKFLOW',figure:'FIG. 03',color:0x8db2ff,steps:['Personnel','Review','Certificate'],descriptions:['An organized personnel register connects each employee profile to the university’s administrative workflows. All records shown are schematic.','Certificate requests pass through an administrative review: employee information, request details, and authorization.','After approval, the application generates a PDF certificate. The raised document and seal illustrate that output.']},
  employee:{title:'THE PERSONNEL ARCHIVE',figure:'FIG. 04',color:0x8db2ff,steps:['Records','Find a profile','Reports'],descriptions:['An indexed archive illustrates how employee profiles, administrative details, and document status stay organized in a structured register.','Search and filters bring a relevant profile out of the register. The moving card illustrates that selection, using schematic information only.','Selected records become a structured export for reporting and administration. The table is illustrative and contains no real employee data.']},
- resume:{title:'A DOCUMENT, BUILT IN LAYERS',figure:'FIG. 05',color:0x8db2ff,steps:['Compose','EN / العربية','PDF'],descriptions:['Education, experience, and skills are editable sections that come together as a résumé.','English and Arabic support adapt the document to different audiences, including right-to-left reading.','The completed profile becomes a downloadable PDF. The floating document is a schematic example.']}
+ resume:{title:'A DOCUMENT, BUILT IN LAYERS',figure:'FIG. 05',color:0x8db2ff,steps:['Compose','EN / العربية','PDF'],descriptions:['Experience, education, and skills are editable sections. The separated layers illustrate how those sections come together as a résumé.','Choose English or Arabic above to preview a left-to-right or right-to-left document layout. This is a schematic preview of the builder’s language support.','The assembled résumé becomes a PDF for download. The scene illustrates that output; use the project link to explore the résumé builder.']}
 };
 let paused=document.body.classList.contains('motion-paused')||matchMedia('(prefers-reduced-motion: reduce)').matches;
 const instances=[];
-const sphereGeometry=new THREE.SphereGeometry(1,24,16),boxGeometry=new THREE.BoxGeometry(1,1,1);
-const material=(color,extra={})=>new THREE.MeshStandardMaterial({color,roughness:.4,metalness:.15,...extra});
-function mesh(geometry,mat,parent,x=0,y=0,z=0){const o=new THREE.Mesh(geometry,mat);o.position.set(x,y,z);parent.add(o);return o}
-function box(parent,w,h,d,mat,x=0,y=0,z=0){const m=mesh(boxGeometry,mat,parent,x,y,z);m.scale.set(w,h,d);return m}
-function ball(parent,r,mat,x=0,y=0,z=0){const m=mesh(sphereGeometry,mat,parent,x,y,z);m.scale.setScalar(r);return m}
-function rod(parent,a,b,r,mat){const m=mesh(new THREE.CylinderGeometry(r,r,1,10),mat,parent);positionRod(m,a,b);return m}
-function positionRod(m,a,b){m.position.copy(a).add(b).multiplyScalar(.5);const delta=b.clone().sub(a);m.scale.y=delta.length();m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),delta.normalize())}
-function rounded(ctx,x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
-function texture(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');draw(ctx,w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t}
-function text(ctx,value,x,y,size,color='#263449',align='left'){ctx.fillStyle=color;ctx.font=`500 ${size}px Arial`;ctx.textAlign=align;ctx.fillText(value,x,y)}
-function documentTexture(title,accent='#739fff',kind='document'){
- return texture(512,680,(c,w)=>{c.fillStyle='#f2f4f6';c.fillRect(0,0,w,680);c.fillStyle=accent;c.fillRect(0,0,w,15);text(c,title,40,67,28);c.fillStyle='#cdd6df';
- if(kind==='profile'){c.fillStyle=accent;c.beginPath();c.arc(84,145,28,0,Math.PI*2);c.fill();rounded(c,46,182,76,25,10);c.fillStyle='#a9b8c8';rounded(c,155,130,280,14,6);rounded(c,155,165,180,11,5);}
- for(let i=0;i<5;i++){const y=kind==='profile'?255+i*66:140+i*88;c.fillStyle=i===0?accent:'#d3dce5';rounded(c,40,y,i%2?315:420,13,5);c.fillStyle='#e0e5eb';rounded(c,40,y+26,390,9,4)}
- if(kind==='certificate'){c.strokeStyle=accent;c.lineWidth=6;c.beginPath();c.arc(397,565,39,0,Math.PI*2);c.stroke();c.beginPath();c.moveTo(378,566);c.lineTo(391,579);c.lineTo(415,550);c.stroke();}
- });
-}
-function card(parent,w,h,map,x=0,y=0,z=0){const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);box(g,w,h,.09,material(0xc9d6e1),0,0,-.035);const face=mesh(new THREE.PlaneGeometry(w-.025,h-.025),new THREE.MeshBasicMaterial({map}),g,0,0,.014);return {group:g,face}}
-function route(parent,points,color){const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));const line=mesh(new THREE.TubeGeometry(curve,60,.018,7,false),material(color,{emissive:color,emissiveIntensity:.25,transparent:true,opacity:.55}),parent);const particle=ball(parent,.075,material(color,{emissive:color,emissiveIntensity:1}));return t=>{particle.position.copy(curve.getPoint((t*.16)%1))}}
-function base(parent,color){const m=mesh(new THREE.CylinderGeometry(2.15,2.22,.13,64),material(0x303640,{metalness:.4}),parent,0,-1.90,0);const ring=mesh(new THREE.TorusGeometry(2.17,.014,8,90),material(color,{emissive:color,emissiveIntensity:.3}),parent,0,-1.82,0);ring.rotation.x=Math.PI/2;return m}
-
-function resumeModel(root,color){
- const page=new THREE.Group();page.position.set(-.55,.05,0);page.rotation.set(.04,-.15,-.055);root.add(page);
- const backing=card(page,2.55,3.6,texture(512,720,c=>{c.fillStyle='#f1f4f9';c.fillRect(0,0,512,720);c.fillStyle='#739fff';c.fillRect(0,0,512,12);text(c,'YOUR NAME',40,83,36);text(c,'PROFESSIONAL PROFILE',40,117,14,'#647086')}));
- const sectionNames=['EXPERIENCE','EDUCATION','SKILLS'];const layers=sectionNames.map((name,i)=>{const t=texture(440,150,c=>{c.fillStyle='#ffffff';c.fillRect(0,0,440,150);text(c,name,22,35,18,'#33568e');for(let j=0;j<3;j++){c.fillStyle='#d1d9e5';rounded(c,22,56+j*25,350-j*35,8,4)}});const piece=card(page,2.18,.73,t,0,.43-i*.92,.10);return piece.group});
- const languageTextures=['EN','العربية'].map((lang,i)=>texture(240,160,c=>{c.fillStyle='#232e42';c.fillRect(0,0,240,160);text(c,lang,120,98,i?41:58,'#b3ccff','center')}));
- const en=card(root,1.12,.75,languageTextures[0],1.67,.93,.25),ar=card(root,1.12,.75,languageTextures[1],1.80,-.02,.40);en.group.rotation.y=-.12;ar.group.rotation.y=-.12;
- const pdf=card(root,1.07,1.47,texture(256,352,c=>{c.fillStyle='#e2e9f5';c.fillRect(0,0,256,352);text(c,'PDF',128,158,60,'#315995','center');text(c,'DOCUMENT',128,205,18,'#536785','center');c.strokeStyle='#7e9bc9';c.lineWidth=4;c.strokeRect(18,18,220,316)}),1.75,-.77,.65);pdf.group.rotation.z=.12;
- return {setStep(step){en.group.visible=ar.group.visible=step===1;pdf.group.visible=step===2},update(t,step,still){layers.forEach((g,i)=>{const z=step===0?.26+(2-i)*.23:.1;g.position.z=THREE.MathUtils.lerp(g.position.z,z,still?1:.07)});page.rotation.y=-.15+(still?0:Math.sin(t*.35)*.045);pdf.group.position.y=-.77+(still?0:Math.sin(t*.7)*.06);}};
-}
-const builders={asl:createHandModel,hr:createHRModel,employee:createEmployeeModel,resume:resumeModel};
+const builders={asl:createHandModel,hr:createHRModel,employee:createEmployeeModel,resume:createResumeModel};
 
 async function mount(host){
  const type=host.dataset.model,def=definitions[type];let renderer;
@@ -49,10 +20,11 @@ async function mount(host){
  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setClearColor(0,0);host.append(renderer.domElement);renderer.domElement.setAttribute('aria-hidden','true');renderer.domElement.setAttribute('tabindex','-1');
  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(36,1,.1,50);camera.position.set(0,.65,8.4);camera.lookAt(0,0,0);scene.add(new THREE.HemisphereLight(0xe6f3ff,0x3a4752,2.4));const key=new THREE.DirectionalLight(0xffffff,3.2);key.position.set(-3,5,6);scene.add(key);const fill=new THREE.DirectionalLight(def.color,.8);fill.position.set(4,1,3);scene.add(fill);
  const root=new THREE.Group();scene.add(root);root.rotation.y=-.08;let model;try{model=await builders[type](root,def.color,host);}catch{renderer.domElement.remove();renderer.dispose();return showFallback(host)}model.setStep(0);
- if(type==='asl'||type==='hr'||type==='employee'){renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;const rim=new THREE.DirectionalLight(0x7daaff,2.3);rim.position.set(1,2,-3);scene.add(rim);}
+ if(type==='asl'||type==='hr'||type==='employee'||type==='resume'){renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;const rim=new THREE.DirectionalLight(0x7daaff,2.3);rim.position.set(1,2,-3);scene.add(rim);}
  host.insertAdjacentHTML('beforeend',`<div class="model-head"><span>${def.title}</span><b>${def.figure} / 3D STUDY</b></div><div class="model-caption"><span>${matchMedia('(pointer: coarse)').matches?'EXPLORE WITH THE CONTROLS BELOW':'DRAG TO ROTATE'}</span><span>CONCEPTUAL MODEL</span></div>`);
  const controls=document.createElement('div');controls.className='model-controls';controls.innerHTML=`<div class="model-step-buttons" role="group" aria-label="Explore ${host.closest('article').querySelector('h3').textContent}">${def.steps.map((label,i)=>`<button type="button" data-model-step="${i}" aria-pressed="${i===0}">${label}</button>`).join('')}</div><p class="model-description" aria-live="polite">${def.descriptions[0]}</p><div class="model-footer"><button type="button" class="model-rotate">Rotate view ↻</button><button type="button" class="model-pause">Pause all motion Ⅱ</button></div>`;host.after(controls);
  const state={host,renderer,scene,camera,root,model,controls,step:0,visible:true,dirty:true,targetX:0,targetY:-.08,dragging:false,dragX:0,dragY:0,autoY:0,time:0};instances.push(state);
+ host.addEventListener('model-refresh',()=>{state.dirty=true});
  controls.querySelectorAll('[data-model-step]').forEach(button=>button.addEventListener('click',()=>{state.step=Number(button.dataset.modelStep);host.dataset.step=String(state.step);model.setStep(state.step);controls.querySelectorAll('[data-model-step]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));controls.querySelector('.model-description').textContent=def.descriptions[state.step];state.dirty=true;}));
  controls.querySelector('.model-pause').addEventListener('click',()=>document.dispatchEvent(new CustomEvent('portfolio-toggle-motion')));
  controls.querySelector('.model-rotate').addEventListener('click',()=>{state.targetY+=Math.PI/8;state.dirty=true;});
