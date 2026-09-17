@@ -1,23 +1,80 @@
 # Salah Eddine Zouitni — Portfolio
 
-Professional portfolio with project-specific 3D models, scroll-driven case-study chapters, native project disclosures, reduced-motion controls, and a printable graduate résumé.
+# Salah Eddine Zouitni · Engineering portfolio
 
-The visual palette pairs graphite and cool white with electric blue. Project models share blue highlights and neutral materials, with their geometry and workflows providing the distinction. The résumé and favicon use the same palette.
+[Live portfolio](https://br1wa.github.io/) · [Résumé](https://br1wa.github.io/resume.html)
 
-Dark mode is the default. The header appearance toggle saves an explicit light/dark preference locally and synchronizes it across portfolio and résumé tabs. Both themes keep the 3D scenes intact. The résumé always prints on white paper with dark text.
+A static portfolio with five project-specific 3D studies, a graphite and electric-blue palette, accessible workflow controls, and a printable graduate résumé. This repository contains the complete source and deployment configuration.
 
-Run `node serve.mjs` for http://localhost:4173. The published directory is `dist/`.
+## Run locally
 
-Content is grounded in the supplied August 2026 CV sources and project READMEs, with graduation updated from the user's September 2026 confirmation. Project images are from the user's ASL and HR repositories. The portrait is from the supplied CV archive. No employee records or operational documents are bundled.
+Install Node.js 22 or newer. The site has no build step or required npm dependencies.
 
-The EnergyAI model is adapted from the user's PFE2-main-release landing page, with the same buildings, solar panels, battery, energy paths, and projected fallback. Its conceptual nature is labelled; it does not request or display live meter data. Google Fonts load with system-font fallbacks. Content remains readable without JavaScript.
+```sh
+git clone https://github.com/BR1WA/br1wa.github.io.git
+cd br1wa.github.io
+npm start
+```
 
-ASL has a sculpted translucent hand with 21 spatial landmarks, a surface scan, feature measurements, and a two-branch classification explanation. Its smooth surface is baked with `node scripts/build-hand-surface.mjs` and loaded only when the model approaches the viewport; it requires no runtime meshing or external model service. The geometry is schematic and does not represent a predicted ASL letter. HR-System has a personnel-to-certificate workflow; Employee Manager has an interactive personnel archive; InfinityScript.CV has a layered résumé with bilingual and PDF views. These four Three.js scenes load on approach, suspend rendering offscreen, respect reduced motion, and share a pause control with EnergyAI. Workflow buttons and a rotate button support keyboard and touch interaction. The models contain no real personnel data, model predictions, or webcam input. Three.js is vendored under its included MIT license.
+Open http://localhost:4173. Run `npm run check` before publishing. The preview supports `/resume`, `/resume.html`, and the custom 404 page.
 
-HR-System's detailed scene uses a layered personnel register, an administrative review terminal, and a certificate output tray connected by animated data paths. The review checks progress before the final document rises; reduced motion renders each stage immediately. All profile and certificate textures are schematic, without personal records or institutional seals.
+## Source layout
 
-Employee Manager uses a detailed open archive with indexed folders, sliding drawers, exposed rails, and a translucent side panel. Search extracts a schematic profile from the archive; the export stage presents a structured report. The scene is a conceptual illustration of the existing record-management workflows, not an interface to personnel data.
+| Path | Purpose |
+| --- | --- |
+| `dist/` | Authored HTML, CSS, JavaScript, and production assets; edit these files directly |
+| `dist/model-loader.js` | Defers Three.js and scene builders until a model approaches the viewport |
+| `dist/project-models.js` | Shared rendering, controls, visibility, and fallback behavior |
+| `dist/*-workflow.js`, `*-archive.js`, `*-studio.js`, `hand-*.js` | Project-specific geometry and animations |
+| `dist/theme.js`, `theme.css` | Saved dark/light preference; dark by default |
+| `scripts/` | Asset generation and deployment checks |
+| `serve.mjs` | Dependency-free local preview server |
+| `.github/workflows/pages.yml` | Checks and publishes only `dist/` to GitHub Pages |
 
-InfinityScript.CV uses a layered document studio with editable sections, paper edges, alignment guides, and a completed PDF preview. English/Arabic controls change the actual document texture and reading direction, including while motion is paused. The model illustrates document construction and export; it does not generate a downloadable résumé itself.
+## Publishing
 
-Public hosting: https://br1wa.github.io/ . Deploy the contents of `dist/` to the root of `BR1WA/br1wa.github.io`, including `.nojekyll`. The previous Sites publication remains available, but GitHub Pages is the current publishing destination.
+Push the full project to `main`. The **Publish portfolio** GitHub Actions workflow validates local links, JavaScript syntax, and social-preview assets, then deploys `dist/`. GitHub Pages must use **GitHub Actions** as its publishing source. No API keys or repository secrets are needed.
+
+The repository previously held only the published files. Its history is preserved; future updates use the complete source on `main`, without subtree publishing.
+
+## Behavior and accessibility
+
+- New visitors see dark mode; an explicit choice persists and synchronizes across tabs. Résumé printing always uses dark text on white paper.
+- A project index provides direct links to all five studies. Email can be opened, copied, or manually selected when clipboard access is denied.
+- Models load near the viewport, suspend rendering offscreen, and respect reduced motion. Pause, stage, and rotate buttons work with keyboard and touch.
+- Static project content remains available without JavaScript, after a model download failure, or when the graphics context is lost.
+- The site includes a 1200 × 630 social preview, sitemap, robots file, and custom 404 page. Google Fonts use local system-font fallbacks.
+
+## Models and asset provenance
+
+**EnergyAI:** adapted from the author's PFE2-main-release landing page, retaining the buildings, solar panels, battery, data paths, and projected fallback. No live meter data is requested.
+
+**ASL:** a baked translucent hand surface with 21 landmarks, feature measurements, and two classification branches. The geometry is schematic and does not predict a sign or access a webcam.
+
+**HR-System:** personnel records, a review terminal, and a certificate tray. **Employee Manager:** indexed folders, sliding drawers, profile extraction, and an export report. Both use schematic records only.
+
+**InfinityScript.CV:** a layered document studio with English/Arabic layout controls and a PDF-output illustration. It does not generate a downloadable résumé itself.
+
+Project screenshots come from the author's EnergyAI, ASL, and HR projects; the portrait comes from the supplied CV. Content is based on the August 2026 CV sources and project READMEs, with graduation confirmed in September 2026. No private project sources, personnel records, or operational documents are included. Three.js is vendored with its [MIT license](dist/vendor/THREE-LICENSE.txt).
+
+## Optional asset tools
+
+The generated assets are committed. These commands are only needed when changing their designs:
+
+```sh
+npm run build:hand
+# Optional original-style re-import; provide your own source file:
+node scripts/import-energy-styles.mjs /path/to/landing.module.css
+```
+
+To regenerate the social preview or run the browser smoke checks, install Playwright locally:
+
+```sh
+npm install --no-save --package-lock=false playwright
+npx playwright install chromium
+npm run build:social
+# With npm start running in another terminal:
+npm run test:browser
+```
+
+The social design is in `scripts/social-preview.html`. Set `BROWSER_CHANNEL=msedge` to use an installed Edge browser instead of Playwright Chromium. `PLAYWRIGHT_MODULE` can point to an existing Playwright installation. Browser-check screenshots go into ignored `tmp/`.

@@ -1,0 +1,16 @@
+{
+  "name": "salah-zouitni-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Salah Eddine Zouitni's engineering portfolio with project-specific 3D studies.",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "dev": "node serve.mjs",
+    "start": "node serve.mjs",
+    "check": "node scripts/check-site.mjs",
+    "build:hand": "node scripts/build-hand-surface.mjs",
+    "build:social": "node scripts/build-social-preview.mjs",
+    "test:browser": "node scripts/smoke-browser.mjs"
+  }
+}

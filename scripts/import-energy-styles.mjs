@@ -1,7 +1,9 @@
 // Port the original user-supplied geometry with the portfolio's shared palette.
 import fs from 'node:fs';
 import {energyPalette} from './energy-palette.mjs';
-const source=fs.readFileSync('C:/Users/salah/Documents/MASTER/PFE2-main-release/frontend/src/components/landing/landing.module.css','utf8');
+const sourcePath=process.argv[2];
+if(!sourcePath)throw new Error('Usage: node scripts/import-energy-styles.mjs <path-to-original-landing.module.css>. The adapted stylesheet is already included in dist/.');
+const source=fs.readFileSync(sourcePath,'utf8');
 const start=source.indexOf('/* Local 3D geometry:');
 const end=source.indexOf('@media (prefers-reduced-motion: no-preference)',start);
 if(start<0||end<0)throw new Error('Original model style boundaries not found');

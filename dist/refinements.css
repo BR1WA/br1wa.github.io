@@ -24,4 +24,18 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline-color:var(--a
 .contact-links a{color:#d9e0ed}
 .contact-links a:hover{color:var(--accent-light)}
 .degree{border-left-color:var(--accent)}
+.project-index{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:-8px 0 36px}
+.project-index a{display:flex;align-items:center;gap:10px;min-height:64px;padding:14px 12px;border:1px solid var(--line);border-radius:7px;font-size:12px;font-weight:500;line-height:1.5;transition:background .2s,border-color .2s}
+.project-index a span{color:var(--muted);font-size:10px}.project-index a b{margin-left:auto;color:var(--accent);font-weight:400}
+.project-index a:hover{background:#e0e7f3;border-color:#8295b7}
+[data-theme=dark] .project-index a{background:#191f29}[data-theme=dark] .project-index a:hover{background:#222e42;border-color:#6488c5}[data-theme=dark] .project-index a b{color:#8db2ff}
+#projects>article,.small-projects>article{scroll-margin-top:24px}
+.contact-email{display:flex;justify-content:center;align-items:center;gap:15px;flex-wrap:wrap;margin:24px auto 0;max-width:100%}
+.contact-email>a{font-size:14px;color:#d9e0ed;overflow-wrap:anywhere}
+.contact-email button{border:1px solid #52627b;border-radius:5px;background:transparent;color:#d9e0ed;padding:10px 14px;font:12px var(--body);min-height:44px}
+.contact-email button:hover{background:#263145}.contact-email button[hidden]{display:none}
+.contact>p.copy-status{min-height:22px;font-size:12px;margin:8px auto 0;color:#b5bdca}
+.energy-evidence[open] summary>span{font-size:0}.energy-evidence[open] summary>span:after{content:'−';font-size:20px}
+@media(max-width:1100px){.project-index{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){.project-index{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.project-index a{font-size:11px;padding:12px 10px;gap:7px;min-height:58px}.project-index a:last-child{grid-column:1/-1}.contact-email{gap:8px}.contact-email>a{font-size:13px}}
 @media(max-width:700px){.hero-actions{flex-wrap:wrap;gap:16px 24px}.hero-actions>a{white-space:nowrap;flex-shrink:0;min-height:44px;display:inline-flex;align-items:center}}
