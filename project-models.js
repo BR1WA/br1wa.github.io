@@ -1,11 +1,12 @@
 import * as THREE from './vendor/three.module.js';
 import {createHandModel} from './hand-landmarks.js';
 import {createHRModel} from './hr-workflow.js';
+import {createEmployeeModel} from './employee-archive.js';
 
 const definitions={
  asl:{title:'THE HAND-LANDMARK PIPELINE',figure:'FIG. 02',color:0x8db2ff,steps:['Landmarks','Features','Classification'],descriptions:['A sculpted hand reveals the 21 spatial landmarks used by the recognition pipeline, from wrist to fingertips.','Selected measurement lines illustrate the 75-feature representation used by Random Forest: coordinates and geometric relationships.','Skeleton images feed MobileNet; engineered features feed Random Forest. Both approaches target 26 alphabet classes. This scene illustrates the pipeline; it does not run inference.']},
  hr:{title:'THE HR DOCUMENT WORKFLOW',figure:'FIG. 03',color:0x8db2ff,steps:['Personnel','Review','Certificate'],descriptions:['An organized personnel register connects each employee profile to the university’s administrative workflows. All records shown are schematic.','Certificate requests pass through an administrative review: employee information, request details, and authorization.','After approval, the application generates a PDF certificate. The raised document and seal illustrate that output.']},
- employee:{title:'THE PERSONNEL ARCHIVE',figure:'FIG. 04',color:0x8db2ff,steps:['Records','Find a profile','Reports'],descriptions:['A structured register organizes employee profiles and administrative information.','Search and filters surface the relevant profile from the personnel archive.','Exports make selected records useful for reporting and administration. No real employee data is shown.']},
+ employee:{title:'THE PERSONNEL ARCHIVE',figure:'FIG. 04',color:0x8db2ff,steps:['Records','Find a profile','Reports'],descriptions:['An indexed archive illustrates how employee profiles, administrative details, and document status stay organized in a structured register.','Search and filters bring a relevant profile out of the register. The moving card illustrates that selection, using schematic information only.','Selected records become a structured export for reporting and administration. The table is illustrative and contains no real employee data.']},
  resume:{title:'A DOCUMENT, BUILT IN LAYERS',figure:'FIG. 05',color:0x8db2ff,steps:['Compose','EN / العربية','PDF'],descriptions:['Education, experience, and skills are editable sections that come together as a résumé.','English and Arabic support adapt the document to different audiences, including right-to-left reading.','The completed profile becomes a downloadable PDF. The floating document is a schematic example.']}
 };
 let paused=document.body.classList.contains('motion-paused')||matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -31,15 +32,6 @@ function card(parent,w,h,map,x=0,y=0,z=0){const g=new THREE.Group();g.position.s
 function route(parent,points,color){const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));const line=mesh(new THREE.TubeGeometry(curve,60,.018,7,false),material(color,{emissive:color,emissiveIntensity:.25,transparent:true,opacity:.55}),parent);const particle=ball(parent,.075,material(color,{emissive:color,emissiveIntensity:1}));return t=>{particle.position.copy(curve.getPoint((t*.16)%1))}}
 function base(parent,color){const m=mesh(new THREE.CylinderGeometry(2.15,2.22,.13,64),material(0x303640,{metalness:.4}),parent,0,-1.90,0);const ring=mesh(new THREE.TorusGeometry(2.17,.014,8,90),material(color,{emissive:color,emissiveIntensity:.3}),parent,0,-1.82,0);ring.rotation.x=Math.PI/2;return m}
 
-function employeeModel(root,color){
- base(root,color);const cabinet=new THREE.Group();cabinet.position.set(-.70,-.20,0);root.add(cabinet);const frame=material(0x4b5668),front=material(0x79869a),accent=material(color,{emissive:color,emissiveIntensity:.08});
- box(cabinet,2.25,2.72,.85,frame,0,0,-.22);box(cabinet,2.3,.13,.94,material(0xaab5c6),0,1.42,-.22);const drawers=[];
- for(let i=0;i<3;i++){const g=new THREE.Group();g.position.set(0,.9-i*.88,.27);cabinet.add(g);box(g,2.04,.73,.75,front,0,0,-.35);box(g,1.0,.075,.11,accent,0,.10,.07);box(g,.44,.13,.016,material(0xe4e9f2),-.58,-.16,.043);for(let j=0;j<4;j++)box(g,1.8,.12,.045,material(j===1?color:0xcfd8e6),0,.3,-.15-j*.13);drawers.push(g)}
- const profile=card(root,1.35,1.85,documentTexture('PROFILE','#739fff','profile'),1.58,.32,.72);profile.group.rotation.set(.02,-.22,-.05);
- const bars=new THREE.Group();bars.position.set(1.62,-1.55,.5);root.add(bars);[.5,.8,.65,1.0].forEach((h,i)=>box(bars,.18,h,.18,accent,(i-1.5)*.31,h/2,0));
- const move=route(root,[[.45,.1,.2],[1.03,.12,.6],[1.53,.32,.7]],color);
- return {setStep(step){bars.visible=step===2;profile.group.visible=step!==0},update(t,step,still){drawers.forEach((g,i)=>{const target=(step===0&&i===0||step===1&&i===1)?.82:.27;g.position.z=THREE.MathUtils.lerp(g.position.z,target,still?1:.07)});profile.group.position.y=.32+(still?0:Math.sin(t*.65)*.05);move(still?2:t);}};
-}
 function resumeModel(root,color){
  const page=new THREE.Group();page.position.set(-.55,.05,0);page.rotation.set(.04,-.15,-.055);root.add(page);
  const backing=card(page,2.55,3.6,texture(512,720,c=>{c.fillStyle='#f1f4f9';c.fillRect(0,0,512,720);c.fillStyle='#739fff';c.fillRect(0,0,512,12);text(c,'YOUR NAME',40,83,36);text(c,'PROFESSIONAL PROFILE',40,117,14,'#647086')}));
@@ -49,7 +41,7 @@ function resumeModel(root,color){
  const pdf=card(root,1.07,1.47,texture(256,352,c=>{c.fillStyle='#e2e9f5';c.fillRect(0,0,256,352);text(c,'PDF',128,158,60,'#315995','center');text(c,'DOCUMENT',128,205,18,'#536785','center');c.strokeStyle='#7e9bc9';c.lineWidth=4;c.strokeRect(18,18,220,316)}),1.75,-.77,.65);pdf.group.rotation.z=.12;
  return {setStep(step){en.group.visible=ar.group.visible=step===1;pdf.group.visible=step===2},update(t,step,still){layers.forEach((g,i)=>{const z=step===0?.26+(2-i)*.23:.1;g.position.z=THREE.MathUtils.lerp(g.position.z,z,still?1:.07)});page.rotation.y=-.15+(still?0:Math.sin(t*.35)*.045);pdf.group.position.y=-.77+(still?0:Math.sin(t*.7)*.06);}};
 }
-const builders={asl:createHandModel,hr:createHRModel,employee:employeeModel,resume:resumeModel};
+const builders={asl:createHandModel,hr:createHRModel,employee:createEmployeeModel,resume:resumeModel};
 
 async function mount(host){
  const type=host.dataset.model,def=definitions[type];let renderer;
@@ -57,7 +49,7 @@ async function mount(host){
  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setClearColor(0,0);host.append(renderer.domElement);renderer.domElement.setAttribute('aria-hidden','true');renderer.domElement.setAttribute('tabindex','-1');
  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(36,1,.1,50);camera.position.set(0,.65,8.4);camera.lookAt(0,0,0);scene.add(new THREE.HemisphereLight(0xe6f3ff,0x3a4752,2.4));const key=new THREE.DirectionalLight(0xffffff,3.2);key.position.set(-3,5,6);scene.add(key);const fill=new THREE.DirectionalLight(def.color,.8);fill.position.set(4,1,3);scene.add(fill);
  const root=new THREE.Group();scene.add(root);root.rotation.y=-.08;let model;try{model=await builders[type](root,def.color,host);}catch{renderer.domElement.remove();renderer.dispose();return showFallback(host)}model.setStep(0);
- if(type==='asl'||type==='hr'){renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;const rim=new THREE.DirectionalLight(0x7daaff,2.3);rim.position.set(1,2,-3);scene.add(rim);}
+ if(type==='asl'||type==='hr'||type==='employee'){renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;const rim=new THREE.DirectionalLight(0x7daaff,2.3);rim.position.set(1,2,-3);scene.add(rim);}
  host.insertAdjacentHTML('beforeend',`<div class="model-head"><span>${def.title}</span><b>${def.figure} / 3D STUDY</b></div><div class="model-caption"><span>${matchMedia('(pointer: coarse)').matches?'EXPLORE WITH THE CONTROLS BELOW':'DRAG TO ROTATE'}</span><span>CONCEPTUAL MODEL</span></div>`);
  const controls=document.createElement('div');controls.className='model-controls';controls.innerHTML=`<div class="model-step-buttons" role="group" aria-label="Explore ${host.closest('article').querySelector('h3').textContent}">${def.steps.map((label,i)=>`<button type="button" data-model-step="${i}" aria-pressed="${i===0}">${label}</button>`).join('')}</div><p class="model-description" aria-live="polite">${def.descriptions[0]}</p><div class="model-footer"><button type="button" class="model-rotate">Rotate view ↻</button><button type="button" class="model-pause">Pause all motion Ⅱ</button></div>`;host.after(controls);
  const state={host,renderer,scene,camera,root,model,controls,step:0,visible:true,dirty:true,targetX:0,targetY:-.08,dragging:false,dragX:0,dragY:0,autoY:0,time:0};instances.push(state);
