@@ -11,4 +11,5 @@ fs.writeFileSync('dist/energy-scene.css',energyPalette(css+`\n/* Portfolio integ
 @media(max-width:1100px){.energy-scene{--scene-scale:.8;height:410px}.energy-scene .sceneTag{padding:9px}.energy-scene .sceneTag strong{font-size:11px}.energy-scene .sceneTag small{font-size:8px}.energy-scene .sourceTag{top:35px}.energy-scene .forecastTag{bottom:58px}.energy-scene .sceneCoordinates{font-size:8px}}
 @media(max-width:700px){.energy-scene{--scene-scale:.85;height:410px}.energy-scene .sourceTag{top:30px}.energy-scene .forecastTag{bottom:66px}.energy-scene .sceneCoordinates{top:14px}.energy-scene .actionTag{bottom:18px}}
 @media(max-width:390px){.energy-scene{--scene-scale:.7;height:370px}.energy-scene .sceneTag{padding:8px;gap:6px}.energy-scene .sceneTag strong{font-size:10px}.energy-scene .tagIcon{width:22px;height:22px}.energy-scene .sceneCoordinates{font-size:7px}}
+@media(max-width:390px){.energy-scene .orbitOne{width:80%;height:60%;left:10%;top:20%}}
 @media(prefers-reduced-motion:reduce){.energy-scene *{animation:none!important;transition:none!important}}\n`));

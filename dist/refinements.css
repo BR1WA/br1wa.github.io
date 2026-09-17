@@ -24,3 +24,4 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline-color:var(--a
 .contact-links a{color:#d9e0ed}
 .contact-links a:hover{color:var(--accent-light)}
 .degree{border-left-color:var(--accent)}
+@media(max-width:700px){.hero-actions{flex-wrap:wrap;gap:16px 24px}.hero-actions>a{white-space:nowrap;flex-shrink:0;min-height:44px;display:inline-flex;align-items:center}}
