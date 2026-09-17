@@ -58,3 +58,19 @@
 .model-host[data-model=hr]:not(.model-ready) :is(.hr-scene-heading,.hr-workflow-strip){display:none}
 @container hr-scene (max-width:450px){.hr-scene-heading{left:16px;right:16px}.hr-scene-heading>strong{max-width:270px;font-size:15px}.hr-workflow-strip{left:16px;right:16px;font-size:10px;gap:5px}.hr-workflow-strip>span{gap:5px}.hr-workflow-strip i{padding:4px;font-size:9px}.hr-workflow-strip>b{font-size:11px}.model-head b{font-size:8px}}
 @container hr-scene (max-width:320px){.hr-workflow-strip i{display:none}.hr-scene-heading>strong{font-size:14px}.model-head b{display:none}}
+
+/* Employee Manager: indexed storage, record retrieval, and structured output. */
+.small-projects .project-visual.model-host[data-model=employee]{height:550px;container:archive-scene / inline-size;background:radial-gradient(ellipse at 45% 40%,#26374d 0%,#19232f 46%,#15181e 80%)!important}
+.model-host[data-model=employee] .model-head{padding-bottom:16px;border-bottom:1px solid #a3bded19}
+.archive-heading{position:absolute;top:65px;left:22px;right:22px;pointer-events:none}
+.archive-heading>span{display:block;font:9px/1.5 var(--body);letter-spacing:1.1px;color:#8da6c9}
+.archive-heading>strong{display:block;font:400 17px/1.5 var(--display);letter-spacing:-.3px;color:#d7e5f9;margin-top:10px}
+.archive-process{position:absolute;bottom:60px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #8cace02b;padding-top:18px;font:11px/1.5 var(--body);color:#8294ad;pointer-events:none}
+.archive-process>span{display:flex;align-items:center;gap:9px}
+.archive-process i{font:10px/1 monospace;font-style:normal;border:1px solid #7c96bd40;border-radius:50%;padding:6px;color:#91a6c4}
+.archive-process .is-active{color:#e1ecfc}
+.archive-process .is-active i{color:#dce9ff;background:#285bb4;border-color:#638cdf}
+.archive-process>b{font-size:14px;font-weight:400;color:#5c7291}
+.model-host[data-model=employee]:not(.model-ready) :is(.archive-heading,.archive-process){display:none}
+@container archive-scene (max-width:450px){.archive-heading{left:16px;right:16px}.archive-heading>strong{max-width:270px;font-size:15px}.archive-process{left:16px;right:16px;font-size:10px;gap:5px}.archive-process>span{gap:5px}.archive-process i{padding:4px;font-size:9px}.archive-process>b{font-size:11px}.model-head b{font-size:8px}}
+@container archive-scene (max-width:320px){.archive-process i{display:none}.archive-heading>strong{font-size:14px}.model-head b{display:none}}

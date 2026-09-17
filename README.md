@@ -14,4 +14,6 @@ ASL has a sculpted translucent hand with 21 spatial landmarks, a surface scan, f
 
 HR-System's detailed scene uses a layered personnel register, an administrative review terminal, and a certificate output tray connected by animated data paths. The review checks progress before the final document rises; reduced motion renders each stage immediately. All profile and certificate textures are schematic, without personal records or institutional seals.
 
+Employee Manager uses a detailed open archive with indexed folders, sliding drawers, exposed rails, and a translucent side panel. Search extracts a schematic profile from the archive; the export stage presents a structured report. The scene is a conceptual illustration of the existing record-management workflows, not an interface to personnel data.
+
 Public hosting: https://br1wa.github.io/ . Deploy the contents of `dist/` to the root of `BR1WA/br1wa.github.io`, including `.nojekyll`. The previous Sites publication remains available, but GitHub Pages is the current publishing destination.
